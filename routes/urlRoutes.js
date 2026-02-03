@@ -1,0 +1,11 @@
+const express = require("express");
+const {
+    handleGenerateNewShortURL,
+    handleGetURLById,
+} = require("../controllers/urlHandlers");
+const router = express.Router();
+
+router.post("/", handleGenerateNewShortURL);
+router.get("/:shortId", handleGetURLById);
+
+module.exports = router;
