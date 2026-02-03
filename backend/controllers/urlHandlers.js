@@ -1,5 +1,5 @@
 const { nanoid } = require("nanoid");
-const URL = require("../../models/schemaURL");
+const URL = require("../models/schemaURL");
 
 async function handleGenerateNewShortURL(req, res) {
     const body = req.body;
@@ -37,7 +37,17 @@ async function handleGetURLById(req, res) {
     res.redirect(entry.redirectURL);
 }
 
+async function handleGetAnalytics(req, res) {
+    const shortId = req.params.shortId;
+    const result = await URL.findOne({ shortId });
+    return res.json({
+        totalClicks: result.visitedHistory.length,
+        analytics: result.visitedHistory,
+    });
+}
+
 module.exports = {
     handleGenerateNewShortURL,
     handleGetURLById,
+    handleGetAnalytics,
 };
