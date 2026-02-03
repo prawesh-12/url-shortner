@@ -1,5 +1,5 @@
 const { nanoid } = require("nanoid");
-const URL = require("../models/schemaURL");
+const URL = require("../../models/schemaURL");
 
 async function handleGenerateNewShortURL(req, res) {
     const body = req.body;

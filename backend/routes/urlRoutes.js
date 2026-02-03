@@ -2,7 +2,7 @@ const express = require("express");
 const {
     handleGenerateNewShortURL,
     handleGetURLById,
-} = require("../controllers/urlHandlers");
+} = require("../backend/controllers/urlHandlers");
 const router = express.Router();
 
 router.post("/", handleGenerateNewShortURL);
