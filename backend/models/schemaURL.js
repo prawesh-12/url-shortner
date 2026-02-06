@@ -9,7 +9,7 @@ const urlSchema = new mongoose.Schema(
         },
         redirectURL: {
             type: String,
-            require: true,
+            required: true,
         },
         visitedHistory: [
             {

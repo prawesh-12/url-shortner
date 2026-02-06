@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>URL Shortener</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>URL Shortener</h1>
+    <br>
+    <div class="card">
+      <form method="POST" action="/url">
+        <div class="form-group">
+          <input type="text" name="url" placeholder="https://example.com/" required />
+          <button type="submit">Shorten</button>
+        </div>
+      </form>
+
+      <% if(locals.error) { %>
+      <div class="error-box">
+        <%= error %>
+      </div>
+      <% } %>
+
+      <% if(locals.success) { %>
+      <div class="success-box">
+        <%= success %>
+      </div>
+      <% } %>
+
+      <% if(locals.id) { %>
+      <div class="result-box">
+        <span class="label">Short URL:</span>
+        <a href="http://localhost:8001/url/<%= id %>" target="_blank">
+          http://localhost:8001/url/<%= id %>
+        </a>
+      </div>
+      <% } %>
+    </div>
+
+    <% if(locals.urls && urls.length > 0) { %>
+    <div class="card">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Short URL</th>
+              <th>Redirect URL</th>
+              <th>Clicks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% urls.forEach((url, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td>
+                <a href="http://localhost:8001/url/<%= url.shortId %>" target="_blank">
+                  http://localhost:8001/url/<%= url.shortId %>
+                </a>
+              </td>
+              <td title="<%= url.redirectURL %>"><%= url.redirectURL %></td>
+              <td><span class="click-badge"><%= url.visitedHistory.length %></span></td>
+              <td>
+                <form method="POST" action="/url/delete/<%= url.shortId %>" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this URL?');">
+                  <button type="submit" class="delete-btn">Delete</button>
+                </form>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</body>
+
+</html>
