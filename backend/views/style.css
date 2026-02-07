@@ -253,4 +253,78 @@ tbody td:nth-child(3) {
     h1 {
         font-size: 1.5rem;
     }
+
+    /* Responsive table for mobile view */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody tr {
+        background: #1f1f23;
+        border: 1px solid #27272a;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+    }
+
+    tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #27272a;
+        text-align: right;
+    }
+
+    tbody td:last-child {
+        border-bottom: none;
+    }
+
+    tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #71717a;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+        text-align: left;
+        flex-shrink: 0;
+        margin-right: 1rem;
+    }
+
+    tbody td:nth-child(2) {
+        background: transparent;
+        border-radius: 0;
+    }
+
+    tbody td:nth-child(2) a {
+        background: #e8e5eb;
+        color: #090510;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        word-break: break-all;
+        max-width: 70%;
+        text-decoration: none;
+        font-family: "Courier New", monospace;
+    }
+
+    tbody td:nth-child(3) {
+        font-size: 0.5rem;
+        word-break: break-all;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        max-width: none;
+        color: #a1a1aa;
+    }
 }
