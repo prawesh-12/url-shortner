@@ -5,6 +5,8 @@
 <p align="center">
   <img src="/assets/preview.png" alt="URL Shortener Application Screenshot" width="700"/>
   <br><br>
-  <em>1). A server side rendered URL shortener built with MongoDB, Express, EJS, and Node.js.</em>
-  <em>2). Built it to learn SSR.</em>
+  <ol>
+    <li>A server side rendered URL shortener built with MongoDB, Express, EJS, and Node.js.</li>
+    <li>Built it to learn SSR(server side rendering).</li>
+  </ol>
 </p>
