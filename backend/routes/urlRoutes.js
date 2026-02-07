@@ -1,10 +1,12 @@
 const express = require("express");
+
 const {
     handleGenerateNewShortURL,
     handleGetURLById,
     handleGetAnalytics,
     handleDeleteURL,
 } = require("../controllers/urlHandlers");
+
 const router = express.Router();
 
 router.post("/", handleGenerateNewShortURL);

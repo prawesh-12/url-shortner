@@ -17,6 +17,10 @@ body {
     margin: 0 auto;
 }
 
+.auth-container {
+    max-width: 450px;
+}
+
 h1 {
     text-align: center;
     font-size: 2rem;
@@ -45,7 +49,9 @@ h1 {
     gap: 0.7rem;
 }
 
-.form-group input[type="text"] {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
     flex: 1;
     padding: 0.7rem 1rem;
     background: #09090b;
@@ -57,11 +63,15 @@ h1 {
     transition: border-color 0.2s;
 }
 
-.form-group input[type="text"]::placeholder {
+.form-group input[type="text"]::placeholder,
+.form-group input[type="email"]::placeholder,
+.form-group input[type="password"]::placeholder {
     color: #52525b;
 }
 
-.form-group input[type="text"]:focus {
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
     border-color: #e8e5eb;
 }
 
@@ -210,6 +220,25 @@ tbody td:nth-child(3) {
 .delete-btn:hover {
     background: #991b1b;
     color: #fff;
+}
+
+.logout-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: #71717a;
+    border: 1px solid #3f3f46;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: #27272a;
+    color: #fff;
+    border-color: #52525b;
 }
 
 @media (max-width: 560px) {

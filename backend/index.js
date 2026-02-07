@@ -1,9 +1,17 @@
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+
 const { connectMongoDB } = require("./connection");
+const {
+    restrictToLoggedInUserOnly,
+    checkAuth,
+} = require("./middlewares/authMiddleware");
+
+// All Routes
 const urlRouter = require("./routes/urlRoutes");
 const staticRoute = require("./routes/staticRouter");
-const URL = require("./models/schemaURL");
+const userRoute = require("./routes/user");
 
 const app = express();
 const PORT = 8001;
@@ -15,12 +23,14 @@ app.set("views", path.resolve("./views"));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Serve static files (CSS, JS, images) from views folder
 app.use(express.static(path.resolve("./views")));
 
-app.use("/url", urlRouter);
-app.use("/", staticRoute);
+app.use("/url", restrictToLoggedInUserOnly, urlRouter);
+app.use("/user", userRoute);
+app.use("/", checkAuth, staticRoute);
 
 connectMongoDB(mongoURL).then(() => {
     app.listen(PORT, () => {

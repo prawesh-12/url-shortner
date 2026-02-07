@@ -5,7 +5,7 @@ function isValidURL(string) {
     try {
         const url = new global.URL(string);
         return url.protocol === "http:" || url.protocol === "https:";
-    } catch (_) {
+    } catch (err) {
         return false;
     }
 }
@@ -28,6 +28,7 @@ async function handleGenerateNewShortURL(req, res) {
             shortId: shortID,
             redirectURL: body.url,
             visitedHistory: [],
+            createdBy: req.user._id,
         });
 
         return res.redirect(`/?newId=${shortID}`);
