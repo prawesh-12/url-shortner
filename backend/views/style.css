@@ -328,3 +328,73 @@ tbody td:nth-child(3) {
         color: #a1a1aa;
     }
 }
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    color: #a1a1aa;
+    font-size: 0.9rem;
+}
+
+.role-badge {
+    background: #27272a;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.admin-link {
+    color: #facc15;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.home-link {
+    color: #fff;
+    text-decoration: none;
+}
+
+.form-group-spaced {
+    margin-bottom: 1rem;
+}
+
+.form-group button.full-width {
+    flex: 1;
+}
+
+.auth-link {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #71717a;
+}
+
+.auth-link a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #71717a;
+    display: none;
+}
+
+.hidden {
+    display: none;
+}

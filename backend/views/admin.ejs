@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - All URLs</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1>Admin - All URLs</h1>
+      <div class="header-actions">
+        <span id="userInfo" class="user-info"></span>
+        <a href="/" class="home-link">Home</a>
+        <a href="#" id="logoutBtn" class="logout-btn">Logout</a>
+      </div>
+    </div>
+    <br />
+
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <div class="card hidden" id="tableCard">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Short URL</th>
+              <th>Redirect URL</th>
+              <th>Created By</th>
+              <th>Clicks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="urlTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p id="emptyMsg" class="empty-msg">
+      No URLs found.
+    </p>
+  </div>
+
+  <script>
+    const BASE_URL = "http://localhost:8001";
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/login";
+    }
+
+    function authHeaders() {
+      return {
+        Authorization: `Bearer ${token}`
+      };
+    }
+
+    function showError(msg) {
+      const box = document.getElementById("errorBox");
+      box.textContent = msg;
+      box.classList.remove('hidden');
+    }
+
+    async function loadUrls() {
+      try {
+        const res = await fetch("/url/admin/all", {
+          headers: authHeaders(),
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+          return;
+        }
+
+        if (res.status === 403) {
+          showError(
+            "Access denied. You are not authorised to view this page.",
+          );
+          return;
+        }
+
+        const data = await res.json();
+        const urls = data.urls || [];
+        const tbody = document.getElementById("urlTableBody");
+        const tableCard = document.getElementById("tableCard");
+        const emptyMsg = document.getElementById("emptyMsg");
+
+        if (urls.length === 0) {
+          tableCard.classList.add('hidden');
+          emptyMsg.classList.remove('hidden');
+          return;
+        }
+
+        emptyMsg.classList.add('hidden');
+        tableCard.classList.remove('hidden');
+        tbody.innerHTML = urls
+          .map((url, index) => {
+            const createdBy = url.createdBy ?
+              `${url.createdBy.name} (${url.createdBy.email})` :
+              "Unknown";
+            return `
+            <tr>
+              <td data-label="S.No">${index + 1}</td>
+              <td data-label="Short URL">
+                <a href="${BASE_URL}/url/${url.shortId}" target="_blank">
+                  ${BASE_URL}/url/${url.shortId}
+                </a>
+              </td>
+              <td data-label="Redirect URL" title="${url.redirectURL}">${url.redirectURL}</td>
+              <td data-label="Created By">${createdBy}</td>
+              <td data-label="Clicks"><span class="click-badge">${url.visitedHistory.length}</span></td>
+              <td data-label="Action">
+                <button class="delete-btn" onclick="deleteUrl('${url.shortId}')">Delete</button>
+              </td>
+            </tr>
+          `;
+          })
+          .join("");
+      } catch (err) {
+        showError("Failed to load URLs");
+      }
+    }
+
+    // Delete URL
+    async function deleteUrl(shortId) {
+      if (!confirm('Are you sure you want to delete this URL?')) return;
+
+      try {
+        const res = await fetch(`/url/delete/${shortId}`, {
+          method: 'POST',
+          headers: authHeaders(),
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+          return;
+        }
+
+        const data = await res.json();
+        if (!res.ok) {
+          showError(data.error);
+          return;
+        }
+
+        loadUrls();
+      } catch (err) {
+        showError('Failed to delete URL');
+      }
+    }
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(base64));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const userData = parseJwt(token);
+    if (userData) {
+      document.getElementById('userInfo').innerHTML =
+        `<strong>${userData.name}</strong> <span class="role-badge">${userData.role}</span>`;
+    }
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      });
+
+    loadUrls();
+  </script>
+</body>
+
+</html>

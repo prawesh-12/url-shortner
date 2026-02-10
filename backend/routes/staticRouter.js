@@ -1,28 +1,8 @@
 const express = require("express");
-const URL = require("../models/schemaURL");
-
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-    if (!req.user) {
-        return res.redirect("/login");
-    }
-
-    try {
-        const allUrls = await URL.find({ createdBy: req.user._id });
-        return res.render("home", {
-            urls: allUrls,
-            id: req.query.newId || null,
-            error: req.query.error || null,
-            success: req.query.success || null,
-        });
-    } catch (error) {
-        console.error("Error loading home:", error);
-        return res.render("home", {
-            urls: [],
-            error: "Failed to load URLs",
-        });
-    }
+router.get("/", (req, res) => {
+    return res.render("home");
 });
 
 router.get("/signup", (req, res) => {
@@ -33,9 +13,8 @@ router.get("/login", (req, res) => {
     return res.render("login");
 });
 
-router.get("/logout", (req, res) => {
-    res.clearCookie("uid");
-    return res.redirect("/login");
+router.get("/admin/urls", (req, res) => {
+    return res.render("admin");
 });
 
 module.exports = router;

@@ -4,8 +4,8 @@ const cookieParser = require("cookie-parser");
 
 const { connectMongoDB } = require("./connection");
 const {
-    restrictToLoggedInUserOnly,
-    checkAuth,
+    checkForAuthentication,
+    restrictTo,
 } = require("./middlewares/authMiddleware");
 
 // All Routes
@@ -24,13 +24,14 @@ app.set("views", path.resolve("./views"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(checkForAuthentication);
 
 // Serve static files (CSS, JS, images) from views folder
 app.use(express.static(path.resolve("./views")));
 
-app.use("/url", restrictToLoggedInUserOnly, urlRouter);
+app.use("/url", restrictTo(["NORMAL", "ADMIN"]), urlRouter);
 app.use("/user", userRoute);
-app.use("/", checkAuth, staticRoute);
+app.use("/", staticRoute);
 
 connectMongoDB(mongoURL).then(() => {
     app.listen(PORT, () => {
